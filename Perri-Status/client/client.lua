@@ -1,4 +1,3 @@
-local ped = PlayerPedId()
 
 local function GetRealPedHealth(ped)
     return math.floor(GetEntityHealth(ped) - 100) < 0 and 0 or math.floor(GetEntityHealth(ped) - 100)
@@ -6,6 +5,7 @@ end
 
 CreateThread(function()
     while true do
+        local ped = PlayerPedId()
         local msec = 1000;
 
         local hunger, thirst 
@@ -18,7 +18,7 @@ CreateThread(function()
 
         SendNUIMessage({
             action = "act",
-            health = GetRealPedHealth(PlayerPedId()),
+            health = GetRealPedHealth(ped),
             stamina = (100 - GetPlayerSprintStaminaRemaining(PlayerId())),
             armour = GetPedArmour(ped), 
             hunger = hunger or 0, 
@@ -34,8 +34,6 @@ end)
 
 
 function GetMinimapAnchor()
-    -- Safezone goes from 1.0 (no gap) to 0.9 (5% gap (1/20))
-    -- 0.05 * ((safezone - 0.9) * 10)
     local safezone = GetSafeZoneSize()
     local safezone_x = 1.0 / 20.0
     local safezone_y = 1.0 / 20.0
